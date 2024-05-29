@@ -7,6 +7,7 @@ import com.example.taskList.domain.exception.ResourceNotFoundException;
 import jakarta.validation.ConstraintDeclarationException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -63,6 +64,12 @@ public class AdviceController {
                         violation -> violation.getMessage()
                 )));
         return exceptionBody;
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionBody handleAuthentication(AuthenticationException e) {
+        return new ExceptionBody("Authentication failed");
     }
 
     @ExceptionHandler(Exception.class)
